@@ -1,0 +1,36 @@
+# Secrets / config
+config.yaml
+config.test.yaml
+config.*.yaml
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+logs/
+*.log
+
+# Claude Code
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+NUL
