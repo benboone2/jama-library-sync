@@ -96,6 +96,24 @@ python sync.py --dry-run --verbose
 python sync.py --config config.test.yaml --dry-run
 ```
 
+## Checking sync status
+
+After reuse links are established, source item fields can change over time (e.g., a definition gets updated). Jama tracks this but doesn't auto-push changes to copies. Use `check_item_sync.py` to find and fix stale copies.
+
+### Report out-of-sync items
+
+```
+python check_item_sync.py
+```
+
+### Fix out-of-sync items (push source fields to stale copies)
+
+```
+python check_item_sync.py --fix
+```
+
+This walks every leaf item in the source library, checks each synced copy's status via the API, and (with `--fix`) pushes the source's current field values to any out-of-sync copies.
+
 ## How Jama reuse works
 
 Jama "reuse" is a two-step process:
@@ -109,7 +127,8 @@ After syncing, both items share the same Global ID and field changes propagate t
 
 ```
 jama-library-sync/
-  sync.py                  # CLI entry point
+  sync.py                  # CLI -- create reuse links for missing items
+  check_item_sync.py       # CLI -- check/fix out-of-sync reused items
   config.example.yaml      # Example config (safe to commit)
   config.yaml              # Your config (gitignored)
   requirements.txt         # Python dependencies

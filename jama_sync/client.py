@@ -98,6 +98,26 @@ class JamaSyncClient:
         logger.debug("GET synced items for %d", item_id)
         return self._client.get_items_synceditems(item_id)
 
+    @_retry
+    def get_sync_status(self, item_id: int, synced_item_id: int) -> bool:
+        """Check whether two synced items are in sync.
+
+        Parameters
+        ----------
+        item_id:
+            One item in the sync group.
+        synced_item_id:
+            Another item in the same sync group.
+
+        Returns
+        -------
+        bool
+            ``True`` if the items are in sync, ``False`` otherwise.
+        """
+        logger.debug("GET sync status %d <-> %d", item_id, synced_item_id)
+        result = self._client.get_items_synceditems_status(item_id, synced_item_id)
+        return result.get("inSync", False)
+
     # ------------------------------------------------------------------
     # Write operations (include a small delay to be kind to the API)
     # ------------------------------------------------------------------
@@ -172,6 +192,52 @@ class JamaSyncClient:
         result = self._client.post_item_sync(
             source_item=new_item_id,
             pool_item=source_item_id,
+        )
+        time.sleep(_WRITE_DELAY)
+        return result
+
+    @_retry
+    def update_item(
+        self,
+        item_id: int,
+        project_id: int,
+        item_type_id: int,
+        child_item_type_id: int | None,
+        parent_id: int,
+        fields: dict[str, Any],
+    ) -> int:
+        """Update (PUT) an item's fields.
+
+        Parameters
+        ----------
+        item_id:
+            The item to update.
+        project_id:
+            Project the item belongs to.
+        item_type_id:
+            Item type.
+        child_item_type_id:
+            Child item type (or ``None``).
+        parent_id:
+            Parent item ID (location stays the same).
+        fields:
+            Field values to write.
+
+        Returns
+        -------
+        int
+            HTTP status code from the API.
+        """
+        logger.debug("PUT item %d  (project=%d, name=%r)",
+                      item_id, project_id, fields.get("name", "?"))
+        location = {"item": parent_id}
+        result = self._client.put_item(
+            project=project_id,
+            item_id=item_id,
+            item_type_id=item_type_id,
+            child_item_type_id=child_item_type_id or item_type_id,
+            location=location,
+            fields=fields,
         )
         time.sleep(_WRITE_DELAY)
         return result
