@@ -1,0 +1,10 @@
+# Indent 2 spaces per level. "| KEY" sets the item type the folder holds (inherited by subfolders).
+Flight Deck | REQ
+  Controls
+    Sidestick
+    Throttle Quadrant
+  Displays
+  Alerting
+Monuments | DES
+  Glareshield
+  Side Consoles

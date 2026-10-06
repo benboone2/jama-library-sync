@@ -118,6 +118,12 @@ class JamaSyncClient:
         result = self._client.get_items_synceditems_status(item_id, synced_item_id)
         return result.get("inSync", False)
 
+    @_retry
+    def get_item_types(self) -> list[dict[str, Any]]:
+        """Fetch all item types defined in the Jama instance."""
+        logger.debug("GET item types")
+        return self._client.get_item_types()
+
     # ------------------------------------------------------------------
     # Write operations (include a small delay to be kind to the API)
     # ------------------------------------------------------------------

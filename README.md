@@ -114,6 +114,41 @@ python check_item_sync.py --fix
 
 This walks every leaf item in the source library, checks each synced copy's status via the API, and (with `--fix`) pushes the source's current field values to any out-of-sync copies.
 
+## Building folder structures
+
+`build_folders.py` creates a nested folder structure under any Jama item (component, set, or folder) from an indented text outline. It uses the same `config.yaml` (only the `jama` section is required) and is independent of the library sync.
+
+### Outline format
+
+Two spaces per level. An optional `| KEY` sets the item type the folder holds; subfolders inherit it. Lines starting with `#` are ignored. See `outline_example.txt`:
+
+```
+Flight Deck | REQ
+  Controls
+    Sidestick
+    Throttle Quadrant
+  Displays
+Monuments | DES
+  Glareshield
+```
+
+### Preview (dry run, the default)
+
+```
+python build_folders.py outline_example.txt --parent 123456 --child-type REQ
+```
+
+### Create the folders
+
+```
+python build_folders.py outline_example.txt --parent 123456 --child-type REQ --no-dry-run
+```
+
+- `--parent` is the API ID of the parent item (the number after `docId=` in the Jama URL, not the document key).
+- `--child-type` is the default item type key for folders with no `| KEY`.
+- All item type keys are validated before anything is created.
+- Folders that already exist under the same parent with the same name (case-insensitive) are reused, so re-running is safe.
+
 ## How Jama reuse works
 
 Jama "reuse" is a two-step process:
@@ -129,6 +164,8 @@ After syncing, both items share the same Global ID and field changes propagate t
 jama-library-sync/
   sync.py                  # CLI -- create reuse links for missing items
   check_item_sync.py       # CLI -- check/fix out-of-sync reused items
+  build_folders.py         # CLI -- build a folder structure from an outline
+  outline_example.txt      # Example outline for build_folders.py
   config.example.yaml      # Example config (safe to commit)
   config.yaml              # Your config (gitignored)
   requirements.txt         # Python dependencies
@@ -138,6 +175,7 @@ jama-library-sync/
     models.py              # Data classes (TreeNode, SyncAction, SyncPlan, etc.)
     tree.py                # Tree fetching and diffing
     reuse.py               # Sync execution (folder creation, item reuse, Global ID linking)
+    folders.py             # Outline parsing and folder-structure building
 ```
 
 ## Notes

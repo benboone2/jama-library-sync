@@ -1,0 +1,47 @@
+# Indent 2 spaces per level. "| KEY" sets the item type the folder holds (inherited by subfolders).
+Glareshield Panel (GP)
+  A1
+  A2
+  A3
+Main Instrument Panel (MP)
+  A1
+  A2
+  A3
+  A4
+  A5
+  A6
+Overhead Panel (OP)
+  A1
+  A2
+  A3
+  A4
+  A5
+  A6
+  A7
+  A8
+  A9
+  A10
+  A11
+  A12
+Pedestal (PD)
+  A1
+  A2
+  A3
+  A4
+  A5
+  A6
+  A7
+  A8
+  A9
+  A10
+  A11
+  A12
+  A13
+  A14
+  A15
+Console
+  Captains's Console (C1)
+  First Officer's Console (C2)
+Side Compartments
+  Captain's Side Compartment (CSC)
+  First Officer's Side Compartment (FSC)
